@@ -19,4 +19,14 @@ public class TeamServiceImpl implements TeamService {
         Optional<Team> team = teamRepository.findById(id);
         return team.orElseThrow(()-> new TeamNotFoundException());
     }
+
+    @Override
+    public Team createTeam(String name, String description, String street, String city, String state, String zip) {
+        return null;
+    }
+
+    @Override
+    public Team updateTeam(String id, String name, String description, String street, String city, String state, String zip) {
+        return null;
+    }
 }
