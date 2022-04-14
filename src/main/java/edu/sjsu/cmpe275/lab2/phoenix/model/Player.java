@@ -4,14 +4,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name="Player")
 public class Player {
     @Id
+    @GeneratedValue(generator="uuid")
+    @GenericGenerator(name="uuid", strategy = "uuid2")
     @Column(name="id")
     private String id;
     @Column(name="first_name")
@@ -29,9 +33,23 @@ public class Player {
     @JoinColumn(name="team_id", referencedColumnName = "id")
     private Team team;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name="player_id", referencedColumnName = "id")
-    private List<Opponent> opponents;
+    @ElementCollection
+    @CollectionTable(name="Opponent",joinColumns = @JoinColumn(name = "player_id",referencedColumnName = "id"))
+    @Column(name="opponent_id")
+    private List<String> opponents;
+
+    public Player(){
+
+    }
+
+    public Player(String firstName, String lastName, String email, String description, Team team) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.description = description;
+        this.team = team;
+        this.opponents = new ArrayList<>();
+    }
 
     public String getId() {
         return id;
@@ -81,11 +99,11 @@ public class Player {
         this.team = team;
     }
 
-    public List<Opponent> getOpponents() {
+    public List<String> getOpponents() {
         return opponents;
     }
 
-    public void setOpponents(List<Opponent> opponents) {
+    public void setOpponents(List<String> opponents) {
         this.opponents = opponents;
     }
 }
