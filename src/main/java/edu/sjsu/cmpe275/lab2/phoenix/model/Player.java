@@ -2,6 +2,7 @@ package edu.sjsu.cmpe275.lab2.phoenix.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sun.istack.NotNull;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -18,37 +19,51 @@ public class Player {
     @GenericGenerator(name="uuid", strategy = "uuid2")
     @Column(name="id")
     private String id;
+    @NotNull
     @Column(name="first_name")
     private String firstName;
+    @NotNull
     @Column(name="last_name")
     private String lastName;
+    @NotNull
     @Column(name="email")
     private String email;
     @Column(name="description")
     private String description;
 
-    @JsonIgnoreProperties("players")
+    @Embedded
+    private Address address;
+
+    @JsonIgnoreProperties({"players","address"})
     @ManyToOne(fetch=FetchType.EAGER)
-    @Fetch(FetchMode.SELECT)
     @JoinColumn(name="team_id", referencedColumnName = "id")
     private Team team;
 
-    @ElementCollection
-    @CollectionTable(name="Opponent",joinColumns = @JoinColumn(name = "player_id",referencedColumnName = "id"))
-    @Column(name="opponent_id")
-    private List<String> opponents;
+    @ManyToMany
+    @JsonIgnoreProperties({"opponentsOf","team","opponents","address"})
+    @JoinTable(name="Opponent",
+            joinColumns={@JoinColumn(name="player_id",referencedColumnName="id")},
+            inverseJoinColumns={@JoinColumn(name="opponent_id",referencedColumnName="id")}
+    )
+    private List<Player> opponents;
+
+    @ManyToMany(mappedBy = "opponents")
+    @JsonIgnoreProperties({"opponents","team","opponentsOf"})
+    @JsonIgnore
+    private List<Player> opponentsOf;
 
     public Player(){
 
     }
 
-    public Player(String firstName, String lastName, String email, String description, Team team) {
+    public Player(String firstName, String lastName, String email, String description, Team team, Address address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.description = description;
         this.team = team;
         this.opponents = new ArrayList<>();
+        this.address = address;
     }
 
     public String getId() {
@@ -99,11 +114,27 @@ public class Player {
         this.team = team;
     }
 
-    public List<String> getOpponents() {
+    public List<Player> getOpponents() {
         return opponents;
     }
 
-    public void setOpponents(List<String> opponents) {
+    public void setOpponents(List<Player> opponents) {
         this.opponents = opponents;
+    }
+
+    public List<Player> getOpponentsOf() {
+        return opponentsOf;
+    }
+
+    public void setOpponentsOf(List<Player> opponentsOf) {
+        this.opponentsOf = opponentsOf;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }
