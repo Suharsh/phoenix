@@ -1,5 +1,7 @@
 package edu.sjsu.cmpe275.lab2.phoenix.model;
 
+import org.springframework.stereotype.Component;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
