@@ -21,9 +21,21 @@ public class Team {
     private String description;
     @Embedded
     private Address address;
-    @JsonIgnoreProperties("team")
-    @OneToMany(mappedBy="team", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"team","address","opponents"})
+    @OneToMany(mappedBy="team", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Player> players;
+
+    public Team(){}
+    public Team(String name, String description, Address address) {
+        this.name = name;
+        this.description = description;
+        this.address = address;
+    }
+
+    @PreRemove
+    public void beforeDelete(){
+        players.forEach(player -> player.setTeam(null));
+    }
 
     public String getId() {
         return id;

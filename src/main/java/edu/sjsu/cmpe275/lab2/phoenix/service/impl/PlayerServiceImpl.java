@@ -28,7 +28,6 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public Player getPlayer(String id){
         Optional<Player> player =  playerRepository.findById(id);
-        System.out.println(player.get().getTeam().getName());
         return player.orElseThrow(()-> new PlayerNotFoundException());
     }
 
