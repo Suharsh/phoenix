@@ -3,11 +3,12 @@ package edu.sjsu.cmpe275.lab2.phoenix.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +56,11 @@ public class Player {
     public Player(){
 
     }
+
+//    @PreRemove
+//    public void beforeDelete(){
+//        team
+//    }
 
     public Player(String firstName, String lastName, String email, String description, Team team, Address address) {
         this.firstName = firstName;

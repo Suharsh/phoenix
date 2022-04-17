@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class PlayerServiceImpl implements PlayerService {
 
     @Autowired
@@ -32,7 +33,6 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    @Transactional
     public Player createPlayer(PlayerRequestDTO player) {
         Optional<Team> team = Optional.empty();
         if (player.teamId != null) {
@@ -49,7 +49,6 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    @Transactional
     public Player updatePlayer(PlayerRequestDTO player) {
         Optional<Team> team = Optional.empty();
         if (player.teamId != null) {
@@ -57,19 +56,25 @@ public class PlayerServiceImpl implements PlayerService {
             if (!team.isPresent())
                 throw new InvalidTeamException();
         }
-        if(!playerRepository.existsById(player.id))
+        Player playerEntity = playerRepository.getById(player.id);
+        if(playerEntity==null)
             throw new PlayerNotFoundException();
         Address address = new Address(player.street, player.city,player.state,player.zip);
-        Player playerEntity = new Player(player.firstName, player.lastName,player.email,player.description,team.orElse(null),address);
-        playerEntity.setId(player.id);
+        playerEntity.setAddress(address);
+        playerEntity.setFirstName(player.firstName);
+        playerEntity.setLastName(player.lastName);
+        playerEntity.setEmail(player.email);
+        playerEntity.setDescription(player.description);
+        playerEntity.setTeam(team.orElse(null));
         return playerRepository.save(playerEntity);
     }
 
     @Override
-    @Transactional
-    public void deletePlayer(String id) {
-        if(!playerRepository.existsById(id))
+    public Player deletePlayer(String id) {
+        Player player = playerRepository.findById(id).orElse(null);
+        if(player==null)
             throw new PlayerNotFoundException();
         playerRepository.deleteById(id);
+        return player;
     }
 }

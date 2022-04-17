@@ -7,5 +7,5 @@ public interface PlayerService {
     public Player getPlayer(String id);
     public Player createPlayer(PlayerRequestDTO player);
     public Player updatePlayer(PlayerRequestDTO player);
-    public void deletePlayer(String id);
+    public Player deletePlayer(String id);
 }
