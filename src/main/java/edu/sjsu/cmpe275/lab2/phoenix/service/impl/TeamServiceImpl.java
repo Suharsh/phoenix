@@ -2,7 +2,9 @@ package edu.sjsu.cmpe275.lab2.phoenix.service.impl;
 
 import edu.sjsu.cmpe275.lab2.phoenix.exception.TeamNotFoundException;
 import edu.sjsu.cmpe275.lab2.phoenix.model.Address;
+import edu.sjsu.cmpe275.lab2.phoenix.model.Player;
 import edu.sjsu.cmpe275.lab2.phoenix.model.Team;
+import edu.sjsu.cmpe275.lab2.phoenix.repository.PlayerRepository;
 import edu.sjsu.cmpe275.lab2.phoenix.repository.TeamRepository;
 import edu.sjsu.cmpe275.lab2.phoenix.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ import java.util.UUID;
 public class TeamServiceImpl implements TeamService {
     @Autowired
     private TeamRepository teamRepository;
+    @Autowired
+    private PlayerRepository playerRepository;
 
     @Override
     public Team getTeam(String id) {
@@ -72,19 +76,12 @@ public class TeamServiceImpl implements TeamService {
 
     }
     public Team deleteTeam(String id){
-        List<Team> teams = teamRepository.findAll();
-        for(Team team:teams){
-            String Tid = team.getId().toString();
-            if(Tid.equals(id)){
-
-                teamRepository.deleteById(id);
-                return team;
-
-            }
-        }
-        return null;
-
-
-
+        Team team = teamRepository.findById(id).orElse(null);
+        if(team==null)
+            throw new TeamNotFoundException();
+        team.getPlayers().forEach(player -> player.setTeam(null));
+        playerRepository.saveAll(team.getPlayers());
+        teamRepository.deleteById(id);
+        return team;
     }
 }
