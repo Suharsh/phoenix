@@ -19,19 +19,6 @@ public class OpponentServiceImpl implements OpponentService {
 
     public ResponseEntity<String> addOpponent(String id1, String id2){
 
-//        Player player1 = new Player();
-//        Player player2 = new Player();
-//        List<Player> players = playerRepository.findAll();
-//        for(Player player:players){
-//            String id = player.getId();
-//            if(id.equals(id1)){
-//                player1 = player;
-//            }
-//            if(id.equals(id2)){
-//                player2 = player;
-//            }
-//        }
-
         Player player1 = playerRepository.findById(id1).orElse(null);
         Player player2 = playerRepository.findById(id2).orElse(null);
 
@@ -57,18 +44,6 @@ public class OpponentServiceImpl implements OpponentService {
 
     public ResponseEntity<String> removeOpponent(String id1, String id2){
 
-//        Player player1 = new Player();
-//        Player player2 = new Player();
-//        List<Player> players = playerRepository.findAll();
-//        for(Player player:players){
-//            String id = player.getId();
-//            if(id.equals(id1)){
-//                player1 = player;
-//            }
-//            if(id.equals(id2)){
-//                player2 = player;
-//            }
-//        }
         Player player1 = playerRepository.findById(id1).orElse(null);
         Player player2 = playerRepository.findById(id2).orElse(null);
 
