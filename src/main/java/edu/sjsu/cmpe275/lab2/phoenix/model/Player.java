@@ -57,11 +57,6 @@ public class Player {
 
     }
 
-//    @PreRemove
-//    public void beforeDelete(){
-//        team
-//    }
-
     public Player(String firstName, String lastName, String email, String description, Team team, Address address) {
         this.firstName = firstName;
         this.lastName = lastName;

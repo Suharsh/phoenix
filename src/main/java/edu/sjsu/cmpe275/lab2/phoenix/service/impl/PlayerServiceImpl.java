@@ -12,9 +12,8 @@ import edu.sjsu.cmpe275.lab2.phoenix.repository.TeamRepository;
 import edu.sjsu.cmpe275.lab2.phoenix.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -74,6 +73,8 @@ public class PlayerServiceImpl implements PlayerService {
         Player player = playerRepository.findById(id).orElse(null);
         if(player==null)
             throw new PlayerNotFoundException();
+        player.getOpponents().forEach(opponent -> opponent.getOpponents().remove(player));
+        playerRepository.saveAllAndFlush(player.getOpponents());
         playerRepository.deleteById(id);
         return player;
     }

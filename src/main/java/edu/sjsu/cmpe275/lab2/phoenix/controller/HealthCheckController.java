@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/phoenix")
-public class test {
+public class HealthCheckController {
     @Autowired
     private TeamRepository teamRepository;
     @GetMapping("/ping")
