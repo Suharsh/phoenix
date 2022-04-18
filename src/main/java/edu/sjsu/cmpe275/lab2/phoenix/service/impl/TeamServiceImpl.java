@@ -31,8 +31,6 @@ public class TeamServiceImpl implements TeamService {
     }
 
 
-
-
     @Override
     public Team createTeam(String name, String description, String street, String city, String state, String zip) {
         Team team = new Team();
@@ -48,14 +46,41 @@ public class TeamServiceImpl implements TeamService {
         return temp;
     }
 
+//    @Override
+//    public Team updateTeam(String id, String name, String description, String street, String city, String state, String zip) {
+//        List<Team> teams = teamRepository.findAll();
+//        for(Team team:teams){
+//            String Tid = team.getId().toString();
+//            if(Tid.equals(id)){
+//
+//                Address address = team.getAddress();
+//                if(address!=null){
+//                    address.setCity(city);
+//                    address.setState(state);
+//                    address.setZip(zip);
+//                    address.setStreet(street);
+//
+//                }
+//
+//                team.setName(name);
+//                team.setDescription(description);
+//                team.setAddress(address);
+//                Team temp =  teamRepository.saveAndFlush(team);
+//                return temp;
+//
+//            }
+//        }
+//        return null;
+//
+//    }
+
     @Override
     public Team updateTeam(String id, String name, String description, String street, String city, String state, String zip) {
         List<Team> teams = teamRepository.findAll();
-        for(Team team:teams){
-            String Tid = team.getId().toString();
-            if(Tid.equals(id)){
 
-                Address address = team.getAddress();
+        Team team = teamRepository.findById(id).orElse(null);
+        if(team!=null){
+            Address address = team.getAddress();
                 if(address!=null){
                     address.setCity(city);
                     address.setState(state);
@@ -69,12 +94,13 @@ public class TeamServiceImpl implements TeamService {
                 team.setAddress(address);
                 Team temp =  teamRepository.saveAndFlush(team);
                 return temp;
-
-            }
+        }else{
+            return null;
         }
-        return null;
+//        return null;
 
     }
+
     public Team deleteTeam(String id){
         Team team = teamRepository.findById(id).orElse(null);
         team.getPlayers().forEach(player -> player.setTeam(null));
