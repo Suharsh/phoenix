@@ -76,6 +76,10 @@ public class PlayerServiceImpl implements PlayerService {
         Player playerEntity = playerRepository.findById(player.id).orElse(null);
         if(playerEntity==null)
             throw new PlayerNotFoundException();
+        Player playerByEmail = playerRepository.findByEmail(player.email);
+        if (playerByEmail!=null && !playerByEmail.getId().equals(playerEntity.getId())) {
+            throw new PlayerAlreadyExistException();
+        }
         Address address = new Address(player.street, player.city,player.state,player.zip);
         playerEntity.setAddress(address);
         playerEntity.setFirstName(player.firstName);
