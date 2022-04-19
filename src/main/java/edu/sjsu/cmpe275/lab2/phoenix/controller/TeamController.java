@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/team")
+@RequestMapping("/phoenix")
 public class TeamController {
 
     @Autowired
@@ -21,7 +21,7 @@ public class TeamController {
      * @param id the ID of the Team
      * @return the Team with the given ID
      */
-    @GetMapping("/{id}")
+    @GetMapping("team/{id}")
     public ResponseEntity<Team> getTeam(@PathVariable String id){
 
         Team team =  teamService.getTeam(id);
@@ -43,7 +43,7 @@ public class TeamController {
      * @param zip           Team address information - zip code
      * @return              the deep form of the Team entity
      */
-    @PostMapping("")
+    @PostMapping("/team")
     public ResponseEntity<Team> createTeam(@RequestParam(name="name") String name,
                                            @RequestParam(name="description",required=false) String description,
                                            @RequestParam(name="street",required=false) String street,
@@ -69,7 +69,7 @@ public class TeamController {
      * @param zip           Team address information - zip code
      * @return              the deep form of the Team entity
      */
-    @PutMapping("/{id}")
+    @PutMapping("team/{id}")
     public ResponseEntity<Team> updateTeam(@PathVariable String id,
                            @RequestParam(name="name") String name,
                            @RequestParam(name="description",required=false) String description,
@@ -93,7 +93,7 @@ public class TeamController {
      * @param id        the ID of the Team to be deleted
      * @return          the deep form the Team object that is being deleted
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("team/{id}")
     public ResponseEntity<Team> deleteTeam(@PathVariable String id){
         Team team = teamService.deleteTeam(id);
         if(team != null){

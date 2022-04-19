@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/opponents")
+@RequestMapping("/phoenix")
 public class OpponentController {
 
     @Autowired
@@ -22,7 +22,7 @@ public class OpponentController {
      * @param id2 the ID of the 2nd player
      * @return String specifying names of both the players added as opponents
     * */
-    @PutMapping("/{id1}/{id2}")
+    @PutMapping("opponents/{id1}/{id2}")
     public ResponseEntity<String> addOpponent(@PathVariable String id1,
                                            @PathVariable String id2){
         return opponentService.addOpponent(id1,id2);
@@ -35,7 +35,7 @@ public class OpponentController {
      * @param id2 the ID of the 2nd player
      * @return String specifying names of both the players removed as opponents
      * */
-    @DeleteMapping("/{id1}/{id2}")
+    @DeleteMapping("opponents/{id1}/{id2}")
     public ResponseEntity<String> removeOpponent(@PathVariable String id1,
                                               @PathVariable String id2){
         return opponentService.removeOpponent(id1,id2);
