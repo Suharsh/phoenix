@@ -11,12 +11,24 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+
+/**
+ * Service Implementation for players
+ */
 @Service
 @Transactional
 public class OpponentServiceImpl implements OpponentService {
     @Autowired
     PlayerRepository playerRepository;
 
+    /**
+     * Adds two players as opponents of each other, given their ID's
+     * throws 404 Not Found Exception if either of the player is not present in the database
+     *
+     * @param id1 id of the player1
+     * @param id2 if of the player2
+     * @return string stating that player1 is not opponent of player2
+     */
     public ResponseEntity<String> addOpponent(String id1, String id2){
 
         Player player1 = playerRepository.findById(id1).orElse(null);
@@ -42,6 +54,14 @@ public class OpponentServiceImpl implements OpponentService {
 
     }
 
+    /**
+     * Removes two players as opponents of each other, given their ID's
+     * throws 404 Not Found Exception if either of the player is not present in the database
+     *
+     * @param id1 id of the player1
+     * @param id2 if of the player2
+     * @return string stating that player1 is not opponent of player2
+     */
     public ResponseEntity<String> removeOpponent(String id1, String id2){
 
         Player player1 = playerRepository.findById(id1).orElse(null);
