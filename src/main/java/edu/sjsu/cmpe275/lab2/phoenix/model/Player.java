@@ -40,7 +40,7 @@ public class Player {
     @JoinColumn(name="team_id", referencedColumnName = "id")
     private Team team;
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"opponentsOf","team","opponents","address"})
     @JoinTable(name="Opponent",
             joinColumns={@JoinColumn(name="player_id",referencedColumnName="id")},
@@ -48,7 +48,7 @@ public class Player {
     )
     private List<Player> opponents;
 
-    @ManyToMany(mappedBy = "opponents",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "opponents",fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"opponents","team","opponentsOf"})
     @JsonIgnore
     private List<Player> opponentsOf;
