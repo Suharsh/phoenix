@@ -15,7 +15,9 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
+/***
+ * Service level implementation for Team
+ */
 @Service
 @Transactional
 public class TeamServiceImpl implements TeamService {
@@ -24,13 +26,30 @@ public class TeamServiceImpl implements TeamService {
     @Autowired
     private PlayerRepository playerRepository;
 
+
+    /***
+     * Gets the Team details for the given Id
+     * throws team not found exception if the id is not found
+     * @param id        Team Id
+     * @return          Team object in its deep form
+     */
     @Override
     public Team getTeam(String id) {
         Optional<Team> team = teamRepository.findById(id);
         return team.orElseThrow(()-> new TeamNotFoundException());
     }
 
-
+    /***
+     * Creates a team with the given details; Team ID is auto generated;
+     *
+     * @param name          name of the Team
+     * @param description   description of the Team
+     * @param street        Team address information - street
+     * @param city          Team address information - city
+     * @param state         Team address information - state
+     * @param zip           Team address information - zip code
+     * @return              the team object in its deep form
+     */
     @Override
     public Team createTeam(String name, String description, String street, String city, String state, String zip) {
         Team team = new Team();
@@ -42,43 +61,27 @@ public class TeamServiceImpl implements TeamService {
         team.setName(name);
         team.setDescription(description);
         team.setAddress(address);
-        Team temp =  teamRepository.saveAndFlush(team);
-        return temp;
+        Team result =  teamRepository.saveAndFlush(team);
+        return result;
     }
 
-//    @Override
-//    public Team updateTeam(String id, String name, String description, String street, String city, String state, String zip) {
-//        List<Team> teams = teamRepository.findAll();
-//        for(Team team:teams){
-//            String Tid = team.getId().toString();
-//            if(Tid.equals(id)){
-//
-//                Address address = team.getAddress();
-//                if(address!=null){
-//                    address.setCity(city);
-//                    address.setState(state);
-//                    address.setZip(zip);
-//                    address.setStreet(street);
-//
-//                }
-//
-//                team.setName(name);
-//                team.setDescription(description);
-//                team.setAddress(address);
-//                Team temp =  teamRepository.saveAndFlush(team);
-//                return temp;
-//
-//            }
-//        }
-//        return null;
-//
-//    }
-
+    /***
+     * Updates a Team with the given details; Team ID is auto generated; players of a Team remains unchanged
+     *
+     * @param id            Team Id
+     * @param name          name of the Team
+     * @param description   description of the Team
+     * @param street        Team address information - street
+     * @param city          Team address information - city
+     * @param state         Team address information - state
+     * @param zip           Team address information - zip code
+     * @return              the team object in its deep form
+     */
     @Override
     public Team updateTeam(String id, String name, String description, String street, String city, String state, String zip) {
-        List<Team> teams = teamRepository.findAll();
 
         Team team = teamRepository.findById(id).orElse(null);
+
         if(team!=null){
             Address address = team.getAddress();
                 if(address!=null){
@@ -97,10 +100,17 @@ public class TeamServiceImpl implements TeamService {
         }else{
             return null;
         }
-//        return null;
+
 
     }
 
+    /***
+     * Deletes the Team with the given ID;
+     *
+     * @param id        the ID of the Team to be deleted
+     * @return          the Team object being deleted in its deep form
+     */
+    @Override
     public Team deleteTeam(String id){
         Team team = teamRepository.findById(id).orElse(null);
         team.getPlayers().forEach(player -> player.setTeam(null));

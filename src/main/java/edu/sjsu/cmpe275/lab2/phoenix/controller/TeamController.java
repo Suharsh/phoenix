@@ -15,6 +15,12 @@ public class TeamController {
     @Autowired
     public TeamService teamService;
 
+    /**
+     * Fetch the details of the Team, given a Team id
+     *
+     * @param id the ID of the Team
+     * @return the Team with the given ID
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Team> getTeam(@PathVariable String id){
 
@@ -26,6 +32,17 @@ public class TeamController {
 
     }
 
+    /***
+     * create a Team with the given details. Name is a mandatory parameters
+     *
+     * @param name          name of the Team
+     * @param description   description of the Team
+     * @param street        Team address information - street
+     * @param city          Team address information - city
+     * @param state         Team address information - state
+     * @param zip           Team address information - zip code
+     * @return              the deep form of the Team entity
+     */
     @PostMapping("")
     public ResponseEntity<Team> createTeam(@RequestParam(name="name") String name,
                                            @RequestParam(name="description",required=false) String description,
@@ -40,6 +57,18 @@ public class TeamController {
         return new ResponseEntity<Team>(HttpStatus.BAD_REQUEST);
     }
 
+    /***
+     * updates a Team with the given details. Name is a mandatory parameters
+     *
+     * @param id            Id of the team
+     * @param name          name of the Team
+     * @param description   description of the Team
+     * @param street        Team address information - street
+     * @param city          Team address information - city
+     * @param state         Team address information - state
+     * @param zip           Team address information - zip code
+     * @return              the deep form of the Team entity
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Team> updateTeam(@PathVariable String id,
                            @RequestParam(name="name") String name,
@@ -58,6 +87,12 @@ public class TeamController {
         return new ResponseEntity<Team>(HttpStatus.NOT_FOUND);
     }
 
+    /***
+     * Delete a Team with the given ID
+     *
+     * @param id        the ID of the Team to be deleted
+     * @return          the deep form the Team object that is being deleted
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Team> deleteTeam(@PathVariable String id){
         Team team = teamService.deleteTeam(id);
