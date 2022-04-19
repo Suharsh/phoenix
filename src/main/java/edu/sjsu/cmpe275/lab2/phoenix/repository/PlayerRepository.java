@@ -6,4 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface PlayerRepository extends JpaRepository<Player,String> {
     public boolean existsByEmail(String email);
+    public Player findByEmail(String email);
 }
