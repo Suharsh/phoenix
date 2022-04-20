@@ -113,6 +113,8 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Team deleteTeam(String id){
         Team team = teamRepository.findById(id).orElse(null);
+        if(team==null)
+            throw new TeamNotFoundException();
         team.getPlayers().forEach(player -> player.setTeam(null));
         playerRepository.saveAll(team.getPlayers());
         teamRepository.deleteById(id);
