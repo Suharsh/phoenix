@@ -1,10 +1,7 @@
 package edu.sjsu.cmpe275.lab2.phoenix.aspect;
 
 import edu.sjsu.cmpe275.lab2.phoenix.dto.PlayerRequestDTO;
-import edu.sjsu.cmpe275.lab2.phoenix.exception.InvalidEmailException;
-import edu.sjsu.cmpe275.lab2.phoenix.exception.InvalidFirstNameException;
-import edu.sjsu.cmpe275.lab2.phoenix.exception.InvalidLastNameException;
-import edu.sjsu.cmpe275.lab2.phoenix.exception.InvalidPlayerIdException;
+import edu.sjsu.cmpe275.lab2.phoenix.exception.*;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -64,6 +61,34 @@ public class ValidationAspect {
 
         if(isEmptyString(id))
             throw new InvalidPlayerIdException();
+    }
+
+    /***
+     * Validates the create team request; throws exception if the team name is empty or null
+     *
+     * @param joinPoint     provides access to arguments of the deletePlayer method call
+     */
+    @Before("execution(public * edu.sjsu.cmpe275.lab2.phoenix.service.TeamService.createTeam(..))")
+    public void validateCreateTeam(JoinPoint joinPoint){
+        Object[] arguments = joinPoint.getArgs();
+        String name = (String) arguments[0];
+        if(isEmptyString(name)){
+            throw new InvalidTeamException();
+        }
+    }
+
+    /***
+     * Validates the update team request; throws exception if the team name is empty or null
+     *
+     * @param joinPoint     provides access to arguments of the deletePlayer method call
+     */
+    @Before("execution(public * edu.sjsu.cmpe275.lab2.phoenix.service.TeamService.updateTeam(..))")
+    public void validateUpdateTeam(JoinPoint joinPoint){
+        Object[] arguments = joinPoint.getArgs();
+        String name = (String) arguments[1];
+        if(isEmptyString(name)){
+            throw new InvalidTeamException();
+        }
     }
 
     /***
